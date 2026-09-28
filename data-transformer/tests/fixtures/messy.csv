@@ -1,0 +1,4 @@
+Cust Name,Order Dt,Amount,Email,Unnamed: 4
+  alice smith ,01/02/2024,"$1,200.50",alice@example.com,
+BOB JONES,15/03/2024,$99,bob@example.com,
+carol,notadate,abc,carol@example.com,

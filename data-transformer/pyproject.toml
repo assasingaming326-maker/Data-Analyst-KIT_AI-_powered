@@ -1,0 +1,25 @@
+[project]
+name = "dtx"
+version = "0.1.0"
+description = "LLM-assisted, deterministic data transformer"
+requires-python = ">=3.10"
+dependencies = ["pandas>=2.0", "openpyxl>=3.1", "chardet>=5", "pyarrow>=14",
+                "fastapi>=0.110", "uvicorn>=0.29", "python-multipart>=0.0.9",
+                "python-dotenv>=1.0", "openai>=1.68.0", "beautifulsoup4>=4.12",
+                "pypdf>=5.0", "PyYAML>=6.0"]
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "httpx", "ruff", "mypy", "hypothesis"]
+connectors = ["sqlalchemy>=2.0"]
+[project.scripts]
+dtx = "dtx.cli:main"
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.setuptools.package-data]
+dtx = ["static/*"]
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+[tool.ruff]
+line-length = 100

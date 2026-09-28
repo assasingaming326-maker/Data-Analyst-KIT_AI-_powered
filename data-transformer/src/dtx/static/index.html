@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#13211d">
+<title>Raw Data to Dataset Converter AI | Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--ink:#17231f;--muted:#68766f;--line:#dce4df;--paper:#f3f6f3;--panel:#fff;--deep:#13211d;--deep-2:#1c2c26;--lime:#c8ef71;--green:#15745e;--green-soft:#e7f4ed;--amber:#a95620;--amber-soft:#fff1e3;--red:#a83f43;--red-soft:#fdebec;--shadow:0 14px 38px #1632280b;--sans:"DM Sans","Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace}
+*{box-sizing:border-box}html{min-width:320px;background:var(--paper)}body{margin:0;color:var(--ink);font-family:var(--sans);font-size:14px;background-color:var(--paper);background-image:linear-gradient(#dfe7e222 1px,transparent 1px),linear-gradient(90deg,#dfe7e222 1px,transparent 1px);background-size:32px 32px}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:wait}[hidden]{display:none!important}
+.topbar{height:68px;background:var(--deep);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 30px;border-bottom:1px solid #ffffff18}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:34px;height:34px;display:grid;place-items:center;background:var(--lime);color:var(--deep);font:600 12px var(--mono);border-radius:4px}.brand-title{font-weight:700;letter-spacing:.02em}.brand-sub{font:10px var(--mono);color:#9bac9f;margin-top:3px}.top-meta{display:flex;align-items:center;gap:18px;color:#c5d0c9;font:11px var(--mono)}.connection{display:flex;align-items:center;gap:8px}.connection-dot,.rail-dot{width:7px;height:7px;border-radius:50%;background:#81918a}.connection.ready .connection-dot{background:var(--lime);box-shadow:0 0 0 4px #c8ef7120}.connection.error .connection-dot{background:#ef7777}.clock{border-left:1px solid #ffffff26;padding-left:18px}
+.layout{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:calc(100vh - 68px)}.sidebar{background:var(--deep);color:#eef4ef;padding:24px 14px 18px;display:flex;flex-direction:column;min-height:calc(100vh - 68px);border-right:1px solid #14221d}.side-head{display:flex;align-items:center;justify-content:space-between;padding:0 9px}.side-label,.eyebrow{font:600 10px var(--mono);letter-spacing:.09em;color:#94a59b}.add-project{width:30px;height:30px;border:1px solid #53635c;background:#21342c;color:var(--lime);border-radius:4px;font-size:20px;line-height:1}.add-project:hover{background:#2b4037;border-color:#84977f}.side-note{margin:13px 9px 14px;color:#64766c;font:10px var(--mono)}.project-list{display:grid;gap:5px}.project-item{position:relative;width:100%;display:flex;align-items:center;gap:10px;text-align:left;background:transparent;border:1px solid transparent;border-radius:4px;color:#c1ccc5;padding:11px 10px;animation:rise .3s both;animation-delay:calc(var(--i,0)*35ms);transition:background .18s,border-color .18s,color .18s}.project-item:hover{background:#ffffff0b;color:#fff}.project-item.active{background:#ffffff12;border-color:#ffffff18;color:#fff}.project-indicator{width:8px;height:8px;border:1px solid #72847a;border-radius:2px;flex:none}.project-item.active .project-indicator{background:var(--lime);border-color:var(--lime);box-shadow:0 0 0 3px #c8ef711a}.project-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;font-size:12px}.draft-mark{color:var(--lime);font:9px var(--mono)}.side-spacer{flex:1;min-height:28px}.sidebar-foot{border-top:1px solid #ffffff18;padding:17px 9px 0;color:#87988e;display:flex;gap:8px;align-items:center;font:10px var(--mono)}.rail-dot{background:var(--lime)}
+.main{min-width:0;padding:30px clamp(18px,3.4vw,52px) 56px;max-width:1600px;width:100%;margin:0 auto}.authbox{background:#fff8e9;border:1px solid #ecd7b6;border-radius:5px;padding:12px 14px;margin-bottom:18px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.authbox label{font-weight:600}.authbox input{min-width:220px;flex:1}.authbox p{width:100%;margin:0;color:var(--muted);font-size:12px}.project-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:24px;animation:rise .45s both}.crumb{font:10px var(--mono);color:var(--muted);margin-bottom:9px}.title-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.project-title{min-width:180px;max-width:min(520px,70vw);border:0;border-bottom:1px solid transparent;background:transparent;padding:0 0 4px;color:var(--ink);font:600 clamp(23px,3vw,31px) var(--sans);outline:none}.project-title:hover,.project-title:focus{border-color:#96a99d}.project-badge,.mono-badge{font:10px var(--mono);padding:5px 7px;border-radius:3px;background:var(--amber-soft);color:var(--amber)}.project-badge.saved{background:var(--green-soft);color:var(--green)}.project-meta{font:10px var(--mono);color:var(--muted);margin-top:9px}.head-actions{display:flex;align-items:center;gap:8px;flex:none}.button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;border:1px solid var(--line);border-radius:4px;background:var(--panel);color:var(--ink);padding:0 12px;font-size:12px;font-weight:600;transition:transform .16s,border-color .16s,background .16s}.button:hover{transform:translateY(-1px);border-color:#9aaba1}.button.primary{background:var(--green);border-color:var(--green);color:#fff}.button.primary:hover{background:#105c4b}.button.danger{color:var(--red);background:transparent}.button.danger:hover{background:var(--red-soft);border-color:#e8b8ba}.button.small{min-height:31px;padding:0 10px;font-size:11px}.button .button-symbol{font:14px var(--mono)}
+.overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:var(--panel);border:1px solid var(--line);border-radius:5px;margin-bottom:18px;box-shadow:var(--shadow);animation:rise .5s both}.metric{padding:14px 18px;border-right:1px solid var(--line)}.metric:last-child{border-right:0}.metric-label{color:var(--muted);font:10px var(--mono);text-transform:uppercase}.metric-value{font:600 19px var(--mono);margin-top:6px}.metric-value.small{font:500 13px var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.work-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(265px,.85fr);align-items:start;gap:18px}.column{display:grid;gap:18px;min-width:0}.panel{background:var(--panel);border:1px solid var(--line);border-radius:5px;box-shadow:var(--shadow);animation:rise .52s both}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}.panel-title{font-size:14px;font-weight:700;margin:0}.panel-kicker{color:var(--muted);font:10px var(--mono);margin-top:4px}.panel-body{padding:18px}.step-label{color:var(--green);font:10px var(--mono);margin-bottom:6px}.dropzone{min-height:154px;border:1px dashed #a9bab0;border-radius:4px;display:grid;place-content:center;text-align:center;padding:20px;background:linear-gradient(135deg,#f6faf6,#fff);transition:border-color .18s,background .18s,transform .18s}.dropzone.dragover{border-color:var(--green);background:#eaf6ef;transform:scale(.995)}.drop-icon{width:37px;height:37px;margin:0 auto 10px;border:1px solid #c7d6cd;border-radius:50%;display:grid;place-items:center;color:var(--green);font:17px var(--mono)}.drop-title{font-weight:600}.drop-help{font-size:12px;color:var(--muted);margin-top:4px}.file-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:10px 12px;background:#f4f7f4;border-radius:3px}.file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:11px var(--mono)}.file-meta{color:var(--muted);font-size:11px;white-space:nowrap}.upload-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}.upload-limit{font:10px var(--mono);color:var(--muted)}.message{color:var(--muted);font-size:12px;margin:10px 0 0;min-height:17px}.message.error{color:var(--red)}
+.pipeline{overflow:hidden}.pipeline-state{font:10px var(--mono);color:var(--muted);display:flex;align-items:center;gap:7px}.state-light{width:7px;height:7px;border-radius:50%;background:#aab7ae}.pipeline-state.working .state-light{background:#df9a50;animation:pulse 1.2s infinite}.pipeline-state.done .state-light{background:var(--green)}.progress-track{height:3px;background:#e8eee9;margin:0 18px 16px;overflow:hidden}.progress-fill{height:100%;width:0;background:var(--green);transition:width .55s cubic-bezier(.2,.8,.2,1);position:relative}.progress-fill.working:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#ffffffaa,transparent);animation:sweep 1.3s infinite}.process-steps{display:grid;gap:0;padding:0 18px 17px}.process-step{display:grid;grid-template-columns:27px minmax(0,1fr) auto;align-items:center;gap:9px;min-height:42px;color:#9aa79f;position:relative}.process-step:not(:last-child):before{content:"";position:absolute;left:12px;top:27px;bottom:-14px;width:1px;background:#e0e7e2}.step-mark{position:relative;z-index:1;width:25px;height:25px;border:1px solid #d6dfd9;border-radius:50%;display:grid;place-items:center;background:#fff;font:10px var(--mono);transition:all .25s}.process-step.active{color:var(--ink)}.process-step.active .step-mark{border-color:var(--green);color:var(--green);box-shadow:0 0 0 4px #15745e12}.process-step.active .step-mark:after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.15s infinite}.process-step.complete{color:#456c5c}.process-step.complete .step-mark{background:var(--green-soft);border-color:#bbd9c8;color:var(--green)}.step-name{font-size:12px;font-weight:600}.step-detail{font:9px var(--mono);color:var(--muted)}.process-step.active .step-detail{color:var(--green)}
+.history-list{display:grid}.job-row{display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;padding:12px 18px;text-align:left;border:0;border-bottom:1px solid #edf1ee;background:transparent;color:var(--ink);transition:background .16s}.job-row:last-child{border-bottom:0}.job-row:hover,.job-row.selected{background:#f4f8f4}.job-indicator{width:7px;height:7px;border-radius:50%;background:#aab7ae}.job-indicator.needs_review{background:#e2a44f}.job-indicator.done{background:var(--green)}.job-indicator.failed{background:var(--red)}.job-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.job-time{font:9px var(--mono);color:var(--muted);margin-top:4px}.job-status{font:9px var(--mono);text-transform:uppercase;color:var(--muted)}.empty-state{padding:22px 18px;color:var(--muted);font-size:12px;line-height:1.5}.plan-panel,.result-panel{overflow:hidden}.plan-summary{padding:12px 18px;background:#f5f8f5;color:var(--muted);font-size:11px;line-height:1.5}.table-wrap{overflow:auto;max-height:390px}table{border-collapse:collapse;width:100%;min-width:610px;font-size:11px}th{text-align:left;background:#f8faf8;color:var(--muted);font:9px var(--mono);text-transform:uppercase;position:sticky;top:0}td,th{padding:9px 11px;border-bottom:1px solid #e9eeea}td:first-child{font-weight:600}.table-input,.table-select{min-width:90px;max-width:150px;padding:6px 7px;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--ink);font-size:11px}.confidence.low{color:var(--amber);font-weight:700}.confidence.high{color:var(--green);font-weight:700}.drop-check{accent-color:var(--green)}.panel-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 18px;border-top:1px solid var(--line)}.panel-foot-note{color:var(--muted);font-size:10px}.report{margin:0;padding:15px 18px;max-height:310px;overflow:auto;background:#f7f9f7;color:#32443b;font:10px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}.download-row{display:flex;gap:8px;flex-wrap:wrap;padding:12px 18px;border-top:1px solid var(--line)}.format-button{border:1px solid var(--line);background:#fff;border-radius:3px;padding:7px 10px;color:var(--green);font:10px var(--mono)}.format-button:hover{background:var(--green-soft);border-color:#bdd8c7}.toast{position:fixed;right:22px;bottom:20px;z-index:10;max-width:min(420px,calc(100vw - 30px));padding:12px 15px;background:var(--deep);color:#fff;border-left:3px solid var(--lime);border-radius:3px;box-shadow:0 10px 35px #13211d33;animation:rise .22s both}.toast.error{border-color:#ee8a8a}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.78)}}@keyframes sweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.process-step.failed{color:var(--red)}.process-step.failed .step-mark{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+	.domain-brief{padding:15px 18px;background:#eef5ef;border-bottom:1px solid var(--line)}.domain-overline{font:600 9px var(--mono);color:var(--green);text-transform:uppercase}.domain-category{font-size:17px;font-weight:700;margin-top:5px}.domain-summary{font-size:12px;color:#53645a;line-height:1.55;margin:6px 0 0;max-width:76ch}.template-head,.report-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px 10px}.template-title{font-size:12px;margin:0}.report-head{border-top:1px solid var(--line)}
+.quality-strip{display:flex;gap:7px;flex-wrap:wrap;padding:11px 18px;border-bottom:1px solid var(--line)}.quality-pill{border:1px solid var(--line);border-radius:3px;padding:5px 7px;color:var(--muted);font:9px var(--mono)}.quality-pill.valid{background:var(--green-soft);border-color:#bbd9c8;color:var(--green)}.quality-pill.invalid{background:var(--red-soft);border-color:#e8b8ba;color:var(--red)}.mono-badge.error{background:var(--red-soft);color:var(--red)}.format-select{min-height:32px;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--ink);padding:0 10px;font:10px var(--mono)}
+.source-tabs{display:flex;gap:4px;padding:11px 18px 0;border-bottom:1px solid var(--line)}.source-tab{border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);padding:8px 12px;font-size:11px;font-weight:600}.source-tab:hover{color:var(--ink)}.source-tab.active{border-bottom-color:var(--green);color:var(--green)}.connector-body{padding:18px}.connector-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.connector-field{display:grid;gap:6px;min-width:0}.connector-field.wide{grid-column:1/-1}.connector-field label{font-size:11px;font-weight:600}.connector-input,.connector-textarea{width:100%;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--ink);padding:9px 10px;font:12px var(--sans)}.connector-input:focus,.connector-textarea:focus{border-color:var(--green);outline:2px solid #15745e20}.connector-textarea{min-height:100px;resize:vertical;font:11px/1.5 var(--mono)}.connector-note{padding:10px 12px;border-left:2px solid #b3c9b9;background:#f5f8f5;color:var(--muted);font-size:11px;line-height:1.5}.connector-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}.connector-state{font:10px var(--mono);color:var(--muted)}.connector-state.ready{color:var(--green)}.connector-state.error{color:var(--red)}
+@media(max-width:980px){.layout{grid-template-columns:205px minmax(0,1fr)}.main{padding:24px 20px 40px}.work-grid{grid-template-columns:minmax(0,1fr)}.right-column{grid-template-columns:1fr 1fr;align-items:start}.sidebar{padding-inline:10px}}
+@media(max-width:680px){.topbar{height:60px;padding:0 15px}.top-meta{gap:10px;font-size:9px}.clock{display:none}.layout{display:flex;flex-direction:column;min-height:calc(100vh - 60px)}.sidebar{min-height:auto;padding:12px 12px 9px;border-right:0;border-bottom:1px solid #ffffff16}.side-head{padding-inline:2px}.side-note,.sidebar-foot{display:none}.project-list{display:flex;overflow-x:auto;padding:9px 1px 1px;scrollbar-width:thin}.project-item{width:auto;min-width:145px;flex:none;padding:9px 10px}.main{padding:20px 13px 34px}.project-head{align-items:flex-start;flex-direction:column;gap:13px;margin-bottom:17px}.head-actions{width:100%;justify-content:flex-start}.project-title{max-width:calc(100vw - 60px);font-size:25px}.overview{margin-bottom:13px}.metric{padding:11px 10px}.metric-label{font-size:8px}.metric-value{font-size:16px}.metric-value.small{font-size:10px}.work-grid,.column{gap:13px}.right-column{grid-template-columns:1fr}.panel-head,.panel-body{padding:14px}.process-steps{padding-inline:14px}.progress-track{margin-inline:14px}.panel-foot{padding:12px 14px}.authbox input{min-width:150px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+.brand-mark{width:38px;height:38px;padding:5px;flex:none;animation:mark-in .55s cubic-bezier(.2,.75,.25,1) both}.brand-mark svg{display:block;width:100%;height:100%}.brand-title{max-width:min(42vw,520px);font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-sub{font-size:9px}.button:focus-visible,.add-project:focus-visible,.project-item:focus-visible,.format-button:focus-visible,.dropzone:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8bbf4a;outline-offset:2px}
+@keyframes mark-in{from{opacity:0;transform:scale(.82) rotate(-5deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@media(max-width:680px){.topbar{padding-inline:12px}.brand{min-width:0;gap:9px}.brand-mark{width:34px;height:34px}.brand-title{max-width:calc(100vw - 190px);font-size:11px}.brand-sub{font-size:8px}.top-meta{gap:8px}}
+@media(max-width:380px){.brand-title{max-width:calc(100vw - 194px);font-size:10px}.brand-sub{display:none}.connection{gap:5px}}
+@media(max-width:680px){.connector-grid{grid-template-columns:1fr}.connector-field.wide{grid-column:auto}.connector-actions{align-items:flex-start;flex-direction:column}.source-tabs{padding-inline:10px}.source-tab{padding-inline:10px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+	<div class="brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 8h4v4H4zm1 10h5v5H5zm-1 12h4v-4H4z" fill="#13211d"/><path d="M10 18h7m-3-3 3 3-3 3" stroke="#13211d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="20" y="6" width="12" height="24" rx="2" fill="#13211d"/><path d="M23 11h6M23 16h6M23 21h3M23 26h6" stroke="#c8ef71" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="brand-title">Raw Data to Dataset Converter AI</div><div class="brand-sub">DATA OPERATIONS</div></div></div>
+	<div class="top-meta"><div id="ai-state" class="connection"><span class="connection-dot"></span><span id="ai-label">Checking model</span></div><div class="clock" id="clock"></div></div>
+</header>
+<div class="layout">
+	<aside class="sidebar">
+		<div class="side-head"><span class="side-label">PROJECTS</span><button id="new-project" class="add-project" type="button" title="Create project" aria-label="Create project">+</button></div>
+		<div class="side-note">LOCAL WORKSPACES</div>
+		<nav id="project-list" class="project-list" aria-label="Projects"></nav>
+		<div class="side-spacer"></div>
+		<div class="sidebar-foot"><span class="rail-dot"></span><span>PROJECT DATA SAVED LOCALLY</span></div>
+	</aside>
+	<main class="main">
+		<section id="authbox" class="authbox" hidden>
+			<label for="api-key">App API key</label><input id="api-key" type="password" autocomplete="current-password" placeholder="Enter the key configured for this app">
+			<button id="save-key" class="button small primary" type="button">Connect</button><p>Only required when API authentication is enabled. This is separate from the Groq key.</p>
+		</section>
+		<section id="active-panel" class="project-head" hidden>
+			<div class="project-info"><div class="crumb">WORKSPACE / ACTIVE PROJECT</div>
+				<div class="title-line"><input id="project-name" class="project-title" maxlength="80" aria-label="Project name"><span id="project-badge" class="project-badge">UNSAVED</span></div>
+				<div class="project-meta">PROJECT <span id="project-id">—</span> · CREATED <span id="project-created">—</span></div>
+			</div>
+			<div class="head-actions"><button id="save-project" class="button primary" type="button"><span class="button-symbol">↥</span>Save project</button><button id="delete-project" class="button danger" type="button">Delete</button></div>
+		</section>
+		<div class="overview" id="overview" hidden>
+			<div class="metric"><div class="metric-label">Project runs</div><div id="metric-runs" class="metric-value">0</div></div>
+			<div class="metric"><div class="metric-label">Completed</div><div id="metric-complete" class="metric-value">0</div></div>
+			<div class="metric"><div class="metric-label">Latest source</div><div id="metric-source" class="metric-value small">No files yet</div></div>
+		</div>
+		<div class="work-grid" id="workspace" hidden>
+			<div class="column">
+				<section class="panel" id="ingest-panel">
+						<div class="panel-head"><div><div class="step-label">01 / SOURCE DATA</div><h2 class="panel-title">Connect a source</h2><div class="panel-kicker">STRUCTURED · SEMI-STRUCTURED · TEXT</div></div><span class="mono-badge">MAX 50 MB</span></div>
+					<div class="source-tabs" role="tablist" aria-label="Source type">
+						<button class="source-tab active" type="button" role="tab" aria-selected="true" data-source-mode="file">File</button>
+						<button class="source-tab" type="button" role="tab" aria-selected="false" data-source-mode="page">Web page</button>
+					</div>
+					<div id="file-source-panel" class="panel-body">
+						<input id="file-input" type="file" accept=".csv,.tsv,.txt,.json,.jsonl,.ndjson,.xml,.yaml,.yml,.xlsx,.xls,.parquet,.html,.htm,.pdf,.eml,.md,.log" hidden>
+						<div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Choose or drop a data file">
+							<div class="drop-icon">↥</div><div class="drop-title">Drop a file to begin</div><div class="drop-help">or select a file from your device</div>
+						</div>
+						<div id="file-row" class="file-row" hidden><span id="file-name" class="file-name"></span><span id="file-size" class="file-meta"></span></div>
+						<div class="upload-actions"><span class="upload-limit">SOURCE PROFILE IS REDACTED BEFORE AI</span><button id="upload-button" class="button primary" type="button" disabled><span class="button-symbol">→</span>Analyze file</button></div>
+						<p id="message" class="message" role="status" aria-live="polite"></p>
+					</div>
+					<div id="webpage-source-panel" class="connector-body" hidden>
+						<div class="connector-note">The app downloads the public HTTPS page as HTML first, then extracts headings, paragraphs, lists, and labeled table rows before AI planning. Navigation, scripts, footnotes, and repeated text are removed. For pages the server cannot reach, download the page in your browser and upload the saved HTML below.</div>
+						<div class="connector-grid" style="margin-top:14px">
+							<div class="connector-field wide"><label for="webpage-url">Webpage link</label><input id="webpage-url" class="connector-input" type="url" inputmode="url" placeholder="https://en.wikipedia.org/wiki/Data" autocomplete="url"></div>
+						</div>
+						<div class="connector-actions"><span id="webpage-state" class="connector-state">Public HTTPS pages only · max 10 MB</span><div class="connector-buttons"><button id="upload-html-button" class="button" type="button">Upload saved HTML</button><button id="webpage-stage-button" class="button primary" type="button">Download, extract &amp; analyze</button></div></div>
+					</div>
+				</section>
+				<section id="plan-panel" class="panel plan-panel" hidden>
+					<div class="panel-head"><div><div class="step-label">02 / HUMAN REVIEW</div><h2 class="panel-title">Review proposed schema</h2></div><span class="mono-badge" id="plan-confidence">PLAN</span></div>
+					<div id="plan-summary" class="plan-summary"></div>
+					<div class="table-wrap"><table id="plan-table"><thead><tr><th>Source</th><th>Target</th><th>Type</th><th>Transform</th><th>Confidence</th><th>Drop</th></tr></thead><tbody></tbody></table></div>
+					<div class="panel-foot"><span class="panel-foot-note">Review low-confidence fields before running.</span><button id="run-button" class="button primary" type="button"><span class="button-symbol">▶</span>Approve &amp; transform</button></div>
+				</section>
+				<section id="result-panel" class="panel result-panel" hidden>
+								<div class="panel-head"><div><div class="step-label">03 / OUTPUT</div><h2 class="panel-title">Run report</h2></div><span id="result-status" class="mono-badge">COMPLETE</span></div>
+								<div class="quality-strip"><span id="schema-result" class="quality-pill">SCHEMA</span><span id="duplicates-result" class="quality-pill">DUPLICATES</span></div>
+					  <div class="domain-brief"><div id="domain-source" class="domain-overline">AI DATASET DOMAIN</div><div id="dataset-category" class="domain-category">Unknown</div><p id="dataset-summary" class="domain-summary"></p></div>
+					<div class="template-head"><div><h3 class="template-title">Schema template</h3><div id="template-caption" class="panel-kicker">MODEL PROPOSAL · REVIEWED PLAN</div></div><span id="template-count" class="mono-badge">0 FIELDS</span></div>
+					<div class="table-wrap"><table id="result-template"><thead><tr><th>Raw field</th><th>Dataset field</th><th>Type</th><th>Transform</th></tr></thead><tbody></tbody></table></div>
+					<div class="download-row"><label class="sr-only" for="dataset-format">Dataset download format</label><select id="dataset-format" class="format-select"><option value="csv">CSV</option><option value="json">JSON</option><option value="parquet">Parquet</option></select><button id="download-dataset" class="format-button" type="button">↓ DOWNLOAD DATASET</button><button class="format-button" data-format="template" type="button">↓ SCHEMA TEMPLATE</button></div>
+					<div class="report-head"><h3 class="template-title">Quality report</h3></div><pre id="report" class="report"></pre>
+				</section>
+			</div>
+			<div class="column right-column">
+				<section class="panel pipeline">
+					<div class="panel-head"><div><h2 class="panel-title">Processing pipeline</h2><div id="process-message" class="panel-kicker">Ready for a source file</div></div><div id="pipeline-state" class="pipeline-state"><span class="state-light"></span><span id="pipeline-label">READY</span></div></div>
+					<div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+					<div class="process-steps">
+						<div class="process-step" data-step="source"><div class="step-mark">01</div><div><div class="step-name">Ingest source</div><div class="step-detail">Format and profile</div></div></div>
+						<div class="process-step" data-step="plan"><div class="step-mark">02</div><div><div class="step-name">Build schema plan</div><div class="step-detail">AI suggestion or rules</div></div></div>
+						<div class="process-step" data-step="review"><div class="step-mark">03</div><div><div class="step-name">Review mapping</div><div class="step-detail">Human approval required</div></div></div>
+						<div class="process-step" data-step="transform"><div class="step-mark">04</div><div><div class="step-name">Transform &amp; validate</div><div class="step-detail">Deterministic quality checks</div></div></div>
+					</div>
+				</section>
+				<section class="panel">
+					<div class="panel-head"><div><h2 class="panel-title">Project activity</h2><div class="panel-kicker">RECENT TRANSFORMATIONS</div></div><span id="job-count" class="mono-badge">0 RUNS</span></div>
+					<div id="job-list" class="history-list"><div class="empty-state">No runs in this project. Add a source file to create the first one.</div></div>
+				</section>
+			</div>
+		</div>
+	</main>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script>
+const TYPES=["string","integer","float","boolean","datetime","category"];
+const TRANSFORMS=["","trim","lower","upper","strip_currency","parse_percent","split_name"];
+const PROJECTS_KEY="dtx-active-project";
+const $=id=>document.getElementById(id);
+const esc=value=>String(value).replace(/[&<>\"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[char]));
+let projects=[],activeProject=null,jobs=[],currentJobId=null,currentPlan=null,selectedFile=null,apiKey=sessionStorage.getItem("dtx-api-key")||"",toastTimer;
+
+async function api(path,options={}){
+	const headers=new Headers(options.headers||{});
+	if(apiKey)headers.set("X-API-Key",apiKey);
+	const response=await fetch(path,{...options,headers});
+	if(!response.ok){
+		if(response.status===401)$("authbox").hidden=false;
+		let payload={};try{payload=await response.json()}catch{}
+		const error=payload.error||{};
+		throw new Error((error.message||response.statusText)+(error.hint?" — "+error.hint:""));
+	}
+	return response;
+}
+function toast(message,error=false){
+	const node=$("toast");node.textContent=message;node.classList.toggle("error",error);node.hidden=false;
+	clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.hidden=true,3600);
+}
+function setMessage(message,error=false){$("message").textContent=message;$("message").classList.toggle("error",error)}
+function dateLabel(timestamp){return timestamp?new Intl.DateTimeFormat(undefined,{month:"short",day:"numeric",year:"numeric"}).format(new Date(timestamp*1000)):"—"}
+function timeLabel(timestamp){return timestamp?new Intl.DateTimeFormat(undefined,{hour:"2-digit",minute:"2-digit",month:"short",day:"numeric"}).format(new Date(timestamp*1000)):""}
+
+function renderProjects(){
+	const nav=$("project-list");nav.replaceChildren();
+	projects.forEach((project,index)=>{
+		const button=document.createElement("button");button.type="button";button.className="project-item";button.style.setProperty("--i",index);
+		button.classList.toggle("active",project.id===activeProject?.id);button.setAttribute("aria-current",project.id===activeProject?.id?"page":"false");
+		const marker=document.createElement("span");marker.className="project-indicator";
+		const name=document.createElement("span");name.className="project-name";name.textContent=project.name;
+		button.append(marker,name);
+		if(project.draft){const draft=document.createElement("span");draft.className="draft-mark";draft.textContent="DRAFT";button.append(draft)}
+		button.onclick=()=>selectProject(project.id);nav.append(button);
+	});
+}
+function renderActiveProject(){
+	if(!activeProject)return;
+	$("active-panel").hidden=false;$("overview").hidden=false;$("workspace").hidden=false;
+	$("project-name").value=activeProject.name;$("project-id").textContent=activeProject.id.slice(0,8).toUpperCase();
+	$("project-created").textContent=dateLabel(activeProject.created);
+	$("project-badge").textContent=activeProject.draft?"UNSAVED":"SAVED";
+	$("project-badge").classList.toggle("saved",!activeProject.draft);
+	syncProjectDraft();
+	renderProjects();
+}
+function syncProjectDraft(){
+	if(!activeProject)return;
+	const changed=activeProject.draft||$("project-name").value.trim()!==activeProject.name;
+	$("project-badge").textContent=changed?"UNSAVED":"SAVED";
+	$("project-badge").classList.toggle("saved",!changed);
+	$("save-project").disabled=!changed;
+}
+function renderJobs(){
+	const list=$("job-list");list.replaceChildren();
+	$("job-count").textContent=`${jobs.length} ${jobs.length===1?"RUN":"RUNS"}`;
+	$("metric-runs").textContent=String(jobs.length);
+	$("metric-complete").textContent=String(jobs.filter(item=>item.status==="done").length);
+	$("metric-source").textContent=jobs[0]?.filename||"No files yet";
+	if(!jobs.length){const empty=document.createElement("div");empty.className="empty-state";empty.textContent="No runs in this project. Add a source file to create the first one.";list.append(empty);return}
+	jobs.forEach(item=>{
+		const button=document.createElement("button");button.type="button";button.className="job-row";button.classList.toggle("selected",item.id===currentJobId);
+		const marker=document.createElement("span");marker.className=`job-indicator ${item.status}`;
+		const copy=document.createElement("span");copy.innerHTML=`<span class="job-name">${esc(item.filename||"Untitled source")}</span><span class="job-time">${esc(timeLabel(item.created))}</span>`;
+		const status=document.createElement("span");status.className="job-status";status.textContent=item.status.replaceAll("_"," ");
+		button.append(marker,copy,status);button.onclick=()=>openJob(item);list.append(button);
+	});
+}
+async function refreshProjects(preferredId){
+	projects=await(await api("/v1/projects")).json();
+	if(!projects.length){const created=await(await api("/v1/projects",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Untitled project"})})).json();projects=[created]}
+	const remembered=preferredId||localStorage.getItem(PROJECTS_KEY);
+	activeProject=projects.find(project=>project.id===remembered)||projects[0];
+	localStorage.setItem(PROJECTS_KEY,activeProject.id);renderActiveProject();await refreshJobs();
+}
+async function refreshJobs(){
+	if(!activeProject)return;
+	jobs=await(await api(`/v1/jobs?project_id=${encodeURIComponent(activeProject.id)}`)).json();
+	renderJobs();
+}
+async function selectProject(projectId){
+	if(projectId===activeProject?.id)return;
+	activeProject=projects.find(project=>project.id===projectId);if(!activeProject)return;
+	localStorage.setItem(PROJECTS_KEY,projectId);currentJobId=null;currentPlan=null;clearSelectedFile();
+	hideJobPanels();renderActiveProject();setStage("ready","Ready for a source file");await refreshJobs();
+}
+function hideJobPanels(){$("plan-panel").hidden=true;$("result-panel").hidden=true}
+function clearSelectedFile(){selectedFile=null;$("file-input").value="";$("file-name").textContent="";$("file-size").textContent="";$("file-row").hidden=true;$("upload-button").disabled=true}
+
+async function createProject(){
+	try{
+		const project=await(await api("/v1/projects",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Untitled project"})})).json();
+		projects.unshift(project);activeProject=project;localStorage.setItem(PROJECTS_KEY,project.id);currentJobId=null;currentPlan=null;clearSelectedFile();hideJobPanels();
+		renderActiveProject();await refreshJobs();setStage("ready","New project ready for source data");$("project-name").focus();$("project-name").select();toast("New project opened");
+	}catch(error){toast(error.message,true)}
+}
+async function saveProject(){
+	if(!activeProject)return;
+	const name=$("project-name").value.trim();if(!name){setMessage("Enter a project name before saving.",true);$("project-name").focus();return}
+	try{
+		activeProject=await(await api(`/v1/projects/${activeProject.id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({name})})).json();
+		projects=projects.map(project=>project.id===activeProject.id?activeProject:project);renderActiveProject();toast("Project saved");
+	}catch(error){toast(error.message,true)}
+}
+async function deleteProject(){
+	if(!activeProject)return;
+	const name=activeProject.name;
+	if(!window.confirm(`Delete “${name}” and permanently remove its uploads, runs, and outputs?`))return;
+	try{
+		await api(`/v1/projects/${activeProject.id}`,{method:"DELETE"});
+		projects=projects.filter(project=>project.id!==activeProject.id);currentJobId=null;currentPlan=null;clearSelectedFile();hideJobPanels();
+		if(!projects.length){const fresh=await(await api("/v1/projects",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:"Untitled project"})})).json();projects=[fresh]}
+		activeProject=projects[0];localStorage.setItem(PROJECTS_KEY,activeProject.id);renderActiveProject();await refreshJobs();setStage("ready","Ready for a source file");toast("Project and its job data deleted");
+	}catch(error){toast(error.message,true)}
+}
+
+const stages=["source","plan","review","transform"];
+const stageProgress={ready:0,upload:12,planning:34,needs_review:60,transforming:84,done:100,failed:100};
+let lastStageIndex=0;
+function setStage(state,detail){
+	let activeIndex={ready:-1,upload:0,planning:1,needs_review:2,transforming:3,done:4,failed:lastStageIndex}[state]??-1;
+	if(state==="ready")lastStageIndex=0;
+	else if(state!=="failed"&&activeIndex>=0&&activeIndex<4)lastStageIndex=activeIndex;
+	document.querySelectorAll(".process-step").forEach((step,index)=>{
+		step.classList.toggle("active",index===activeIndex&&state!=="done"&&state!=="failed");
+		step.classList.toggle("complete",index<activeIndex||state==="done");
+		step.classList.toggle("failed",state==="failed"&&index===activeIndex);
+	});
+	const progress=$("progress-fill");progress.style.width=`${state==="failed"?(activeIndex+1)*20:stageProgress[state]??0}%`;
+	progress.classList.toggle("working",["upload","planning","transforming"].includes(state));
+	$("process-message").textContent=detail||({ready:"Ready for a source file",upload:"Receiving source file",planning:"Building a schema proposal",needs_review:"Plan ready for review",transforming:"Applying approved transformations",done:"Quality checks complete",failed:"Process stopped with an error"}[state]);
+	$("pipeline-label").textContent=state.replaceAll("_"," ").toUpperCase();
+	$("pipeline-state").classList.toggle("working",["upload","planning","transforming"].includes(state));
+	$("pipeline-state").classList.toggle("done",state==="done");
+}
+function setConnection(ready){$("ai-state").classList.toggle("ready",ready);$("ai-state").classList.toggle("error",!ready);$("ai-label").textContent=ready?"AI configured":"Rules fallback"}
+function renderPlan(){
+	const body=$("plan-table").tBodies[0];body.replaceChildren();
+	currentPlan.columns.forEach((column,index)=>{
+		const row=body.insertRow();const confidence=Number(column.confidence)||0;
+		row.innerHTML=`<td>${esc(column.source)}</td><td><input class="table-input" value="${esc(column.target)}" data-index="${index}" data-field="target" aria-label="Target for ${esc(column.source)}"></td>`+
+			`<td><select class="table-select" data-index="${index}" data-field="type">${TYPES.map(type=>`<option value="${type}" ${type===column.type?"selected":""}>${type}</option>`).join("")}</select></td>`+
+			`<td><select class="table-select" data-index="${index}" data-field="transform">${TRANSFORMS.map(transform=>`<option value="${transform}" ${transform===(column.transform||"")?"selected":""}>${transform||"none"}</option>`).join("")}</select></td>`+
+			`<td class="confidence ${confidence<.7?"low":"high"}">${Math.round(confidence*100)}%</td><td><input class="drop-check" type="checkbox" data-index="${index}" data-field="drop" aria-label="Drop ${esc(column.source)}" ${column._drop?"checked":""}></td>`;
+	});
+	body.oninput=body.onchange=event=>{
+		const target=event.target,index=Number(target.dataset.index),field=target.dataset.field;if(!field)return;
+		if(field==="drop")currentPlan.columns[index]._drop=target.checked;
+		else currentPlan.columns[index][field]=target.value||null;
+	};
+}
+function showPlan(jobState){
+	$("plan-panel").hidden=false;$("result-panel").hidden=true;
+	const llm=jobState.meta?.used_llm;
+	const source=jobState.meta?.source;
+	const sourceSummary=source?`${source.category.toUpperCase()} · ${source.format} · ${source.handling}`:"Source classification unavailable";
+	$("plan-summary").textContent=`${sourceSummary} · ${llm?`AI proposal · ${jobState.meta.model}`:`Rule-based fallback · ${jobState.meta?.fallback_reason||"LLM unavailable"}`} · ${jobState.rows||"—"} rows · review before transformation.`;
+	$("plan-confidence").textContent=jobState.needs_review?"REVIEW FLAGS":"READY TO RUN";renderPlan();
+}
+async function pollJob(jobId){
+	while(true){
+		const state=await(await api(`/v1/jobs/${jobId}`)).json();
+		if(state.status==="queued"||state.status==="planning")setStage("planning","AI is mapping the redacted profile");
+		if(state.status==="needs_review")setStage("needs_review","Schema proposal ready · inspect each mapping");
+		if(state.status==="transforming")setStage("transforming","Applying deterministic transformations and checks");
+		if(state.status==="done")setStage("done","Transformation and quality checks complete");
+		if(state.status==="failed")setStage("failed",state.error||"Process failed");
+		await refreshJobs();
+		if(["needs_review","done","failed"].includes(state.status))return state;
+		await new Promise(resolve=>setTimeout(resolve,700));
+	}
+}
+async function openJob(item){
+	currentJobId=item.id;currentPlan=null;hideJobPanels();renderJobs();setMessage("");
+	if(item.status==="needs_review"){
+		setStage("needs_review","Schema proposal ready · inspect each mapping");
+		currentPlan=await(await api(`/v1/jobs/${item.id}/plan`)).json();const state=await(await api(`/v1/jobs/${item.id}`)).json();showPlan(state);
+	}else if(item.status==="done"){
+		setStage("done","Transformation and quality checks complete");await showReport(item.id);
+	}else if(["queued","planning","transforming"].includes(item.status)){
+		setStage(item.status==="transforming"?"transforming":"planning","Resuming saved job status");
+		const state=await pollJob(item.id);if(state.status==="needs_review"){currentPlan=await(await api(`/v1/jobs/${item.id}/plan`)).json();showPlan(state)}else if(state.status==="done")await showReport(item.id);
+	}else if(item.status==="failed"){
+		setStage("failed",item.error||"This job did not complete");
+		try{await showReport(item.id)}catch{setMessage(item.error||"No report is available for this failed job.",true)}
+	}else setStage("failed",item.error||"This job did not complete");
+}
+async function showReport(jobId){
+	const [report,plan,state]=await Promise.all([
+		api(`/v1/jobs/${jobId}/report`).then(response=>response.json()),
+		api(`/v1/jobs/${jobId}/plan`).then(response=>response.json()),
+		api(`/v1/jobs/${jobId}`).then(response=>response.json())
+	]);
+	$("report").textContent=JSON.stringify(report,null,2);$("result-status").textContent=report.status.toUpperCase();
+	$("result-status").className=`mono-badge ${report.status==="fail"?"error":""}`;
+	const schema=report.schema_validation;
+	$("schema-result").textContent=schema?schema.valid?"SCHEMA VALID":"SCHEMA FAILED":"SCHEMA NOT RECORDED";
+	$("schema-result").className=`quality-pill ${schema?(schema.valid?"valid":"invalid"):""}`;
+	const duplicatesRemoved=Number(report.duplicates_removed)||0;
+	$("duplicates-result").textContent=`${duplicatesRemoved} DUPLICATES REMOVED`;
+	$("duplicates-result").className=`quality-pill ${duplicatesRemoved?"valid":""}`;
+	$("domain-source").textContent=state.meta?.used_llm?"AI-GENERATED DATA DOMAIN":"PROFILE-BASED DATA SUMMARY";
+	$("dataset-category").textContent=plan.category||"Unknown";
+	$("dataset-summary").textContent=plan.notes||"No dataset summary was returned with this plan.";
+	$("template-caption").textContent=state.meta?.used_llm?`AI PROPOSAL · ${state.meta.model} · REVIEWED PLAN`:"RULE-BASED PLAN · REVIEWED TEMPLATE";
+	const body=$("result-template").tBodies[0];body.replaceChildren();
+	plan.columns.forEach(column=>{
+		const row=body.insertRow();[column.source,column.target,column.type,column.transform||"none"].forEach(value=>{const cell=row.insertCell();cell.textContent=value});
+	});
+	plan.drop.forEach(source=>{const row=body.insertRow();[source,"Excluded","—","drop"].forEach(value=>{const cell=row.insertCell();cell.textContent=value})});
+	$("template-count").textContent=`${plan.columns.length} ${plan.columns.length===1?"FIELD":"FIELDS"}`;
+	$("result-panel").hidden=false;
+}
+async function startUpload(){
+	if(!selectedFile||!activeProject)return;
+	const projectId=activeProject.id;$("upload-button").disabled=true;setMessage("");hideJobPanels();setStage("upload","Uploading and profiling source");
+	try{
+		const form=new FormData();form.append("file",selectedFile);form.append("project_id",projectId);
+		const created=await(await api("/v1/jobs",{method:"POST",body:form})).json();
+		await processNewJob(created.job_id,projectId);
+	}catch(error){setStage("failed",error.message);setMessage(error.message,true)}
+	finally{$("upload-button").disabled=!selectedFile;await refreshJobs()}
+}
+async function processNewJob(jobId,projectId){
+	currentJobId=jobId;setStage("planning","AI is mapping the redacted profile");const state=await pollJob(jobId);
+	if(activeProject?.id!==projectId)return;
+	if(state.status==="needs_review"){
+		currentPlan=await(await api(`/v1/jobs/${jobId}/plan`)).json();showPlan(state);toast("Schema proposal ready for review");
+	}else if(state.status==="failed")toast(state.error||"Planning failed. Review this job for details.",true);
+}
+function sourceMode(mode){
+	document.querySelectorAll("[data-source-mode]").forEach(tab=>{
+		const active=tab.dataset.sourceMode===mode;tab.classList.toggle("active",active);tab.setAttribute("aria-selected",String(active));
+	});
+	$("file-source-panel").hidden=mode!=="file";$("webpage-source-panel").hidden=mode!=="page";
+}
+async function startWebpage(){
+	if(!activeProject)return;
+	const projectId=activeProject.id,url=$("webpage-url").value.trim();
+	if(!url)return toast("Paste a webpage link first.",true);
+	const button=$("webpage-stage-button");button.disabled=true;setStage("upload","Fetching and extracting webpage content");hideJobPanels();
+	try{
+		const created=await(await api("/v1/jobs/from-webpage",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({project_id:projectId,url})})).json();
+		await processNewJob(created.job_id,projectId);
+	}catch(error){toast(error.message,true);setStage("failed",error.message)}
+	finally{button.disabled=false;await refreshJobs()}
+}
+async function runTransform(){
+	if(!currentJobId||!currentPlan)return;
+	$("run-button").disabled=true;setMessage("");
+	try{
+		const columns=currentPlan.columns.filter(column=>!column._drop).map(({_drop,...column})=>column);
+		const body={...currentPlan,columns,drop:[...currentPlan.drop,...currentPlan.columns.filter(column=>column._drop).map(column=>column.source)]};
+		await api(`/v1/jobs/${currentJobId}/plan`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+		await api(`/v1/jobs/${currentJobId}/run`,{method:"POST"});const state=await pollJob(currentJobId);
+		if(state.status==="done"){await showReport(currentJobId);toast("Transform complete")}
+		else if(state.status==="failed"){try{await showReport(currentJobId)}catch{setMessage(state.error||"Transformation failed.",true)}}
+		else setMessage(state.error||"Transformation failed quality checks.",true);
+	}catch(error){setStage("failed",error.message);setMessage(error.message,true)}
+	finally{$("run-button").disabled=false;await refreshJobs()}
+}
+async function downloadOutput(format){
+	if(!currentJobId)return;
+	try{
+		let blob,filename;
+		if(format==="template"){
+			const response=await api(`/v1/jobs/${currentJobId}/plan`);blob=new Blob([JSON.stringify(await response.json(),null,2)],{type:"application/json"});
+			const projectSlug=(activeProject?.name||"dataset").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");filename=`${projectSlug||"dataset"}-schema-template.json`;
+		}else{
+			const response=await api(`/v1/jobs/${currentJobId}/output?format=${format}`);blob=await response.blob();
+			const sourceName=jobs.find(job=>job.id===currentJobId)?.filename||"dataset";
+			const sourceBase=sourceName.replace(/\.[^.]+$/g,"");
+			const datasetSlug=`${activeProject?.name||"dataset"}-${sourceBase}`.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+			filename=`${datasetSlug||"dataset"}.${format}`;
+		}
+		const url=URL.createObjectURL(blob);const anchor=document.createElement("a");anchor.href=url;anchor.download=filename;anchor.click();setTimeout(()=>URL.revokeObjectURL(url),60000);
+	}catch(error){toast(error.message,true)}
+}
+async function loadWorkspace(){
+	try{
+		const readiness=await(await api("/readyz")).json();setConnection(Boolean(readiness.llm_configured));
+		await refreshProjects();
+	}catch(error){if(!$("authbox").hidden)$("api-key").focus();else toast(error.message,true)}
+}
+
+$("new-project").onclick=createProject;$("save-project").onclick=saveProject;$("delete-project").onclick=deleteProject;
+$("project-name").addEventListener("keydown",event=>{if(event.key==="Enter")saveProject()});
+$("project-name").addEventListener("input",syncProjectDraft);
+$("save-key").onclick=async()=>{apiKey=$("api-key").value.trim();if(apiKey)sessionStorage.setItem("dtx-api-key",apiKey);else sessionStorage.removeItem("dtx-api-key");$("authbox").hidden=true;await loadWorkspace()};
+$("run-button").onclick=runTransform;
+$("upload-button").onclick=startUpload;
+document.querySelectorAll("[data-source-mode]").forEach(tab=>tab.onclick=()=>sourceMode(tab.dataset.sourceMode));
+$("webpage-stage-button").onclick=startWebpage;
+$("upload-html-button").onclick=()=>{sourceMode("file");$("file-input").click()};
+$("file-input").onchange=event=>{
+	selectedFile=event.target.files[0]||null;$("file-row").hidden=!selectedFile;$("upload-button").disabled=!selectedFile;
+	if(selectedFile){$("file-name").textContent=selectedFile.name;$("file-size").textContent=`${(selectedFile.size/1024/1024).toFixed(2)} MB`;setStage("ready","Source selected · ready to analyze");setMessage("")}
+};
+$("dropzone").onclick=()=>$("file-input").click();$("dropzone").onkeydown=event=>{if(event.key==="Enter"||event.key===" "){$("file-input").click();event.preventDefault()}};
+$("dropzone").ondragover=event=>{event.preventDefault();$("dropzone").classList.add("dragover")};
+$("dropzone").ondragleave=()=>$("dropzone").classList.remove("dragover");
+$("dropzone").ondrop=event=>{event.preventDefault();$("dropzone").classList.remove("dragover");const file=event.dataTransfer.files[0];if(file){const input=$("file-input");const transfer=new DataTransfer();transfer.items.add(file);input.files=transfer.files;input.dispatchEvent(new Event("change"))}};
+document.querySelectorAll("[data-format]").forEach(button=>button.onclick=()=>downloadOutput(button.dataset.format));
+$("download-dataset").onclick=()=>downloadOutput($("dataset-format").value);
+$("clock").textContent=new Intl.DateTimeFormat(undefined,{weekday:"short",month:"short",day:"numeric"}).format(new Date()).toUpperCase();
+$("api-key").value=apiKey;
+loadWorkspace();
+</script>
+</body>
+</html>
